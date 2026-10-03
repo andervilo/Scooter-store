@@ -21,7 +21,10 @@ const statements = [
 `CREATE INDEX IF NOT EXISTS idx_service_orders_company ON service_orders(company_id)`,
 `CREATE INDEX IF NOT EXISTS idx_service_orders_customer ON service_orders(customer_id)`,
 `CREATE INDEX IF NOT EXISTS idx_service_orders_vehicle ON service_orders(vehicle_id)`,
-`CREATE INDEX IF NOT EXISTS idx_service_orders_status ON service_orders(status)`
+`CREATE INDEX IF NOT EXISTS idx_service_orders_status ON service_orders(status)`,
+`CREATE TABLE IF NOT EXISTS plans (id TEXT PRIMARY KEY, code TEXT NOT NULL UNIQUE, name TEXT NOT NULL, max_employees INTEGER, max_customers INTEGER, max_vehicles INTEGER, active INTEGER NOT NULL DEFAULT 1 CHECK(active IN (0,1)), created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)`,
+`CREATE TABLE IF NOT EXISTS company_subscriptions (id TEXT PRIMARY KEY, company_id TEXT NOT NULL UNIQUE REFERENCES companies(id), plan_id TEXT NOT NULL REFERENCES plans(id), status TEXT NOT NULL DEFAULT 'ACTIVE' CHECK(status IN ('TRIAL','ACTIVE','PAST_DUE','CANCELED')), trial_ends_at TEXT, current_period_ends_at TEXT, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)`,
+`CREATE INDEX IF NOT EXISTS idx_company_subscriptions_plan ON company_subscriptions(plan_id)`
 ];
 
 export async function migrate() {
