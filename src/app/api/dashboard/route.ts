@@ -1,0 +1,1 @@
+import{NextResponse}from"next/server";import{requireCompany}from"@/lib/permissions";import{getDashboard}from"@/modules/dashboard/service";export async function GET(){try{const u=await requireCompany();return NextResponse.json(await getDashboard(u.companyId));}catch{return NextResponse.json({error:"Forbidden"},{status:403});}}
