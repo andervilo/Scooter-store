@@ -1,0 +1,1 @@
+import{NextResponse}from"next/server";import{requireCustomer}from"@/lib/permissions";import{getProfile}from"@/modules/customer-portal/service";export async function GET(){try{const u=await requireCustomer();return NextResponse.json(await getProfile(u.customerId));}catch{return NextResponse.json({error:"Forbidden"},{status:403});}}

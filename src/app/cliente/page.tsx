@@ -1,9 +1,1 @@
-import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/lib/auth";
-
-export default async function CustomerHome() {
-  const user = await getCurrentUser();
-  if (!user) redirect("/login");
-  if (user.role !== "CUSTOMER" || !user.customerId) redirect("/app");
-  return <main className="p-6"><div className="mx-auto max-w-5xl"><h1 className="text-3xl font-bold">Portal do Cliente</h1><p className="mt-2 text-slate-600">Bem-vindo, {user.email}.</p></div></main>;
-}
+import{redirect}from"next/navigation";import Link from"next/link";import{getCurrentUser}from"@/lib/auth";import{getOrders,getProfile,getVehicles}from"@/modules/customer-portal/service";export default async function Page(){const u=await getCurrentUser();if(!u)redirect("/login");if(u.role!=="CUSTOMER"||!u.customerId)redirect("/app");const[p,v,o]=await Promise.all([getProfile(u.customerId),getVehicles(u.customerId),getOrders(u.customerId)]);return <main className="px-6 py-10"><div className="mx-auto max-w-5xl"><h1 className="text-3xl font-bold">Olá, {String(p?.name??u.email)}</h1><p className="mt-2 text-slate-600">Acompanhe seus veículos e serviços.</p><div className="mt-8 grid gap-4 sm:grid-cols-2"><Link href="/cliente/veiculos" className="rounded-2xl bg-white p-5 shadow-sm"><p className="text-sm text-slate-500">Meus veículos</p><strong className="text-3xl">{v.length}</strong></Link><Link href="/cliente/ordens" className="rounded-2xl bg-white p-5 shadow-sm"><p className="text-sm text-slate-500">Ordens de serviço</p><strong className="text-3xl">{o.length}</strong></Link></div></div></main>
