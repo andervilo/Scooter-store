@@ -1,0 +1,5 @@
+import * as r from "@/modules/vehicles/repository";import type{VehicleInput}from "@/modules/vehicles/repository";
+const TYPES=["ELECTRIC_SCOOTER","ELECTRIC_BIKE","SCOOTER","BIKE","OTHER"];
+async function validate(companyId:string,i:VehicleInput){const v={...i,customerId:i.customerId?.trim(),brand:i.brand?.trim(),model:i.model?.trim(),serialNumber:i.serialNumber?.trim(),color:i.color?.trim(),notes:i.notes?.trim()};if(!v.customerId||!v.brand||!v.model)throw new Error("REQUIRED_FIELDS");if(!TYPES.includes(v.type))throw new Error("INVALID_TYPE");if(!await r.customerExists(companyId,v.customerId))throw new Error("INVALID_CUSTOMER");return v;}
+export const listVehicles=r.listVehicles;export const findVehicle=r.findVehicle;export const setVehicleActive=r.setVehicleActive;
+export async function createVehicle(c:string,i:VehicleInput){return r.createVehicle(c,await validate(c,i));}export async function updateVehicle(c:string,id:string,i:VehicleInput){return r.updateVehicle(c,id,await validate(c,i));}
