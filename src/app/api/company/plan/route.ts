@@ -1,0 +1,1 @@
+import{NextResponse}from"next/server";import{requireCompany}from"@/lib/permissions";import{getCompanyPlan}from"@/modules/plans/service";export async function GET(){try{const u=await requireCompany();return NextResponse.json({plan:await getCompanyPlan(u.companyId)});}catch{return NextResponse.json({error:"Forbidden"},{status:403});}}
