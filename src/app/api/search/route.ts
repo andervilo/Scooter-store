@@ -1,0 +1,1 @@
+import{NextResponse}from"next/server";import{requireCompany}from"@/lib/permissions";import{globalSearch}from"@/modules/search/service";export async function GET(req:Request){try{const u=await requireCompany();return NextResponse.json(await globalSearch(u.companyId,new URL(req.url).searchParams.get("q")??""));}catch{return NextResponse.json({error:"Forbidden"},{status:403});}}
