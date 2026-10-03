@@ -32,3 +32,14 @@ npm run build
 ## Documentação
 
 Consulte a pasta `docs/` para PRD, especificação técnica e plano de implementação.
+
+## Banco de dados
+
+Sem variáveis configuradas, o desenvolvimento usa `file:local.db`. Para Turso, configure `TURSO_DATABASE_URL` e `TURSO_AUTH_TOKEN` no servidor.
+
+```bash
+npm run db:migrate
+npm run db:seed
+```
+
+Valores monetários são armazenados em centavos (inteiros) para evitar erros de ponto flutuante.
